@@ -42,7 +42,7 @@ from scipy.stats import pearsonr
 import hickle as hkl
 import scipy.sparse as sp
 import argparse
-from .model import KerasMultiSourceDualGCNModel
+from model import KerasMultiSourceDualGCNModel
 
 unit_list = [256]
 israndom = False
@@ -314,9 +314,18 @@ def FeatureExtract(
 
 
 class MyCallback(Callback):
-    def __init__(self, validation_data, result_file_path, patience):
-        self.x_val = validation_data[0]
-        self.y_val = validation_data[1]
+    def __init__(self, val_data, result_file_path, patience):
+        # self.x_val = validation_data[0]
+        # self.y_val = validation_data[1]
+        if isinstance(val_data, tf.data.Dataset):
+            if not hasattr(val_data, "_batch_size"):
+                val_data = val_data.batch(32)
+            x_val = val_data
+            y_val = np.concatenate([y for _, y in val_data], axis=0)
+        else:
+            x_val, y_val = val_data
+        self.x_val = x_val
+        self.y_val = y_val
         self.best_weight = None
         self.patience = patience
         self.result_file_path = result_file_path
