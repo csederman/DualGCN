@@ -9,11 +9,11 @@ from keras.layers import Dropout, GlobalMaxPooling1D, GlobalAveragePooling1D
 from keras.models import Model
 from keras.optimizers import Adam
 from keras.regularizers import l2
-from .layers.graph import GraphLayer, GraphConv
+from layers.graph import GraphLayer, GraphConv
 
 
 class KerasMultiSourceDualGCNModel(object):
-    def __init__(self, use_gexpr=True, use_cn=True, regr=True):  #
+    def __init__(self, use_gexpr=True, use_cn=True, regr=True):
         self.use_gexpr = use_gexpr
         self.use_cn = use_cn
         self.regr = regr
